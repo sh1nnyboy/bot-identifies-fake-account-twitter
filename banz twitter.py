@@ -4,10 +4,10 @@ import re
 from datetime import datetime
 
 # Insert your own consumer_key, consumer_secret, access_token, and access_token_secret
-consumer_key = 'diUncxIseQPJQjnA9KgvL6pmt'
-consumer_secret = 'fc9CxWLGUdHIh8EJHApGvPc61g9xQFacDAlOVxmjrNHTcKuEpK'
-access_token = '1334183299015606272-b8w3RcYqXldAk6OOG2Ux2UJgzIZchx' 
-access_token_secret = 'gwgnuZEfRdbmpy4dqtdMVD5YLuunySXyIIJiQR3VNATF5' 
+consumer_key = 'insert ur api'
+consumer_secret = 'insert ur api'
+access_token = 'insert ur api' 
+access_token_secret = 'insert ur api' 
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
