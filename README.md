@@ -37,7 +37,7 @@ An account is classified as a bot if it exhibits 5 or more of these characterist
 
 1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/bot-identifies-fake-account-twitter.git
+   git clone https://github.com/sh1nnyboy/bot-identifies-fake-account-twitter.git
    cd bot-identifies-fake-account-twitter
    ```
 
