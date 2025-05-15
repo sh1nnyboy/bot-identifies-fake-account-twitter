@@ -3,11 +3,11 @@ import time
 import re
 from datetime import datetime
 
-# Insert your own consumer_key, consumer_secret, access_token, and access_token_secret
-consumer_key = 'insert ur api'
-consumer_secret = 'insert ur api'
-access_token = 'insert ur api' 
-access_token_secret = 'insert ur api' 
+# Insert your Twitter API credentials here
+consumer_key = 'insert your api key'
+consumer_secret = 'insert your api secret'
+access_token = 'insert your access token' 
+access_token_secret = 'insert your access token secret' 
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
@@ -19,58 +19,64 @@ def is_bot(username):
         user = api.get_user(screen_name=username)
         bot_like_characteristics = 0
 
-        # Criteria 1: Tweet perhari lebih dari 10
+        # Criterion 1: More than 10 tweets per day
         tweets_per_day = user.statuses_count / ((time.time() - user.created_at.timestamp()) / (60 * 60 * 24))
         if tweets_per_day > 10:
             bot_like_characteristics += 1
 
-        # Criteria 2: Perbandingan followers dan following 5:1
+        # Criterion 2: Followers to following ratio less than 1:5
         if user.followers_count < user.friends_count / 5:
             bot_like_characteristics += 1
 
-        # Criteria 3: Bio terlalu simple / kosong
+        # Criterion 3: Bio too simple or empty
         if user.description == "" or len(user.description.split(" ")) < 3:
             bot_like_characteristics += 1
 
-        # Criteria 4: Username ada symbol atau angka
+        # Criterion 4: Username contains symbols or numbers
         if re.search(r'\d', username) or re.search(r'\W', username):
             bot_like_characteristics += 1
 
-        # Criteria 5: Tidak ada photo profile
+        # Criterion 5: No profile picture
         if user.default_profile_image:
             bot_like_characteristics += 1
 
-        # Criteria 6: Umur akun kurang dari satu tahun
+        # Criterion 6: Account age less than one year
         account_age_days = (datetime.now() - user.created_at).days
         if account_age_days < 365:
             bot_like_characteristics += 1
 
-        # Criteria 7: Tidak memiliki banner
+        # Criterion 7: No profile banner
         try:
             banner = user.profile_banner_url
         except Exception:
             bot_like_characteristics += 1
 
-        # Criteria 8: Follow salah satu dari @aniesbaswedan, @prabowo, @ganjarpranowo
-        target_ids = [api.get_user(screen_name=target).id for target in ['aniesbaswedan', 'prabowo', 'ganjarpranowo']]
+        # Criterion 8: Follows one of these political accounts (if you want to check other political accounts, you can change the target_accounts list)
+        target_accounts = ['aniesbaswedan', 'prabowo', 'ganjarpranowo']
+        target_ids = [api.get_user(screen_name=target).id for target in target_accounts]
         following_ids = api.friends_ids(user.id)
         if any(target_id in following_ids for target_id in target_ids):
             bot_like_characteristics += 1
 
+        # Account is considered a bot if it meets 5 or more criteria
         if bot_like_characteristics >= 5:
             return True
 
         return False 
 
     except Exception as e:
-        print("Error processing account " + username)
-        print("Exception:", e)
+        print(f"Error processing account {username}")
+        print(f"Exception: {e}")
         return False
 
-username = "username"
-bot_result = is_bot(username)
+def main():
+    username = input("Enter Twitter username to check: ")
+    bot_result = is_bot(username)
 
-if bot_result:
-    print("Bot: " + username)
-else:
-    print("Human: " + username)
+    if bot_result:
+        print(f"Bot: {username}")
+    else:
+        print(f"Human: {username}")
+
+if __name__ == "__main__":
+    main() 
